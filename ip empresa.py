@@ -1,14 +1,28 @@
-import requests,json
+import requests, json
 
-def obteneripdesdedominio(dominios):
-    print("------dominio->"+str(dominios+"-----"))
-    resultadobusqueda = requests.get("https://networkcalc.com/api/dns/lookup/"+str(dominios))
-    if resultadobusqueda.json()['records'] != None:
-        for i in range(len(resultadobusqueda.json()['records']['A'])):
-            ip = resultadobusqueda.json()['records']['A'][i]['address']
-            resultadoregion= requests.get("https://ipinfo.io/"+str(ip)+"/json")
-            print("la region de la ip ->"+str(ip)+" es "+str(resultadoregion.json()))
-dominios=[
+# Función para obtener IPs y región desde un dominio
+def obtenerIPdesdeDominio(dominio):
+    print("------ Dominio: " + str(dominio) + " ------")
+    resultadoBusqueda = requests.get("https://networkcalc.com/api/dns/lookup/"+str(dominio))
+    if resultadoBusqueda.json()['records'] != None:
+        for i in range(len(resultadoBusqueda.json()['records']['A'])):
+            ip = resultadoBusqueda.json()['records']['A'][i]['address']
+            resultadoRegion = requests.get("https://ipinfo.io/"+str(ip)+"/json")
+            print("La IP es: " + str(ip) + " y su región es: " + str(resultadoRegion.json()))
+    else:
+        print(f"No se encontraron registros para {dominio}")
+
+
+def obtenerEmailsdesdeDominio(dominio):
+    print("------ Correos para el dominio: " + str(dominio) + " ------")
+    resultadoEmails = requests.get("https://api.hunter.io/v2/domain-search?domain="+str(dominio)+"&api_key=3be4bd56d0e0b0de1b899203b1a98102bede7166")
+    if resultadoEmails.status_code == 200:
+        print(json.dumps(resultadoEmails.json(), indent=4))
+    else:
+        print("Error al obtener correos del dominio:", dominio)
+
+# Lista completa de dominios de empresas
+dominios_empresa = [
     "notonthehighstreet.com",
     "opumo.com",
     "trouva.com",
@@ -37,10 +51,6 @@ dominios=[
 ]
 
 
-
-
-def obteneremailsdesdedominio(dominios):
-    resultadoemails = requests.get("https://api.hunter.io/v2/domain-search?domain="+str(dominios)+ "&api_key=3be4bd56d0e0b0de1b899203b1a98102bede7166")
-
 for i in dominios:
     obteneripdesdedominio(i)
+
