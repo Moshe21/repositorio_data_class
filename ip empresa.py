@@ -51,6 +51,6 @@ dominios_empresa = [
 ]
 
 
-for i in dominios:
-    obteneripdesdedominio(i)
-
+for dominio in dominios_empresa:
+    obtenerIPdesdeDominio(dominio)
+    obtenerEmailsdesdeDominio(dominio)
